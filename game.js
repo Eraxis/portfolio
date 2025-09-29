@@ -23,27 +23,52 @@ let chests = [];
 let popup;
 
 function preload() {
-    this.load.image('tiles', 'https://examples.phaser.io/assets/tilemaps/tiles/dungeon.png');
-    this.load.tilemapTiledJSON('map', 'https://examples.phaser.io/assets/tilemaps/maps/dungeon.json');
-    this.load.spritesheet('player', 'https://examples.phaser.io/assets/sprites/phaser-dude.png', { frameWidth: 32, frameHeight: 48 });
-    this.load.image('chest', 'https://examples.phaser.io/assets/sprites/chest.png');
+    // Tilesets
+    this.load.image('tiles', 'assets/tiles/dungeon.png'); // exemple dungeon tileset
+
+    // Personnage (Link)
+    this.load.spritesheet('link', 'assets/sprites/link.png', { frameWidth: 16, frameHeight: 16 });
+
+    // Coffre
+    this.load.image('chest', 'assets/sprites/chest.png');
+
+    // Sons/Musique
+    // this.load.audio('music', 'assets/audio/music.mp3');
 }
 
 function create() {
-    // Carte
+    // Carte simple
     const map = this.make.tilemap({ key: 'map' });
     const tileset = map.addTilesetImage('dungeon', 'tiles');
     map.createLayer('Ground', tileset, 0, 0);
     map.createLayer('Walls', tileset, 0, 0);
 
     // Personnage
-    player = this.physics.add.sprite(400, 300, 'player', 4);
+    player = this.physics.add.sprite(400, 300, 'link', 0);
     player.setCollideWorldBounds(true);
 
-    // Animation marche simple
+    // Animations marche
     this.anims.create({
         key: 'walk-down',
-        frames: this.anims.generateFrameNumbers('player', { start: 0, end: 3 }),
+        frames: this.anims.generateFrameNumbers('link', { start: 0, end: 3 }),
+        frameRate: 8,
+        repeat: -1
+    });
+    this.anims.create({
+        key: 'walk-left',
+        frames: this.anims.generateFrameNumbers('link', { start: 4, end: 7 }),
+        frameRate: 8,
+        repeat: -1
+    });
+    this.anims.create({
+        key: 'walk-right',
+        frames: this.anims.generateFrameNumbers('link', { start: 8, end: 11 }),
+        frameRate: 8,
+        repeat: -1
+    });
+    this.anims.create({
+        key: 'walk-up',
+        frames: this.anims.generateFrameNumbers('link', { start: 12, end: 15 }),
         frameRate: 8,
         repeat: -1
     });
@@ -62,41 +87,56 @@ function create() {
         chestSprite.content = data.content;
         chests.push(chestSprite);
 
-        // Interaction
+        // Interaction avec le coffre
         this.physics.add.overlap(player, chestSprite, () => {
             showPopup(chestSprite.content);
         });
     });
 
+    // Popup HTML pour afficher le contenu
     popup = document.getElementById('popup');
-
-    // Fermer le popup au clic
     popup.addEventListener('click', () => {
         popup.style.display = 'none';
     });
+
+    // (Optionnel) musique d'ambiance
+    // let music = this.sound.add('music', { loop: true });
+    // music.play();
 }
 
 function update() {
     player.setVelocity(0);
+    let moving = false;
 
     if (cursors.left.isDown) {
-        player.setVelocityX(-150);
-        player.anims.play('walk-down', true);
+        player.setVelocityX(-100);
+        player.anims.play('walk-left', true);
+        moving = true;
     } else if (cursors.right.isDown) {
-        player.setVelocityX(150);
-        player.anims.play('walk-down', true);
-    } else if (cursors.up.isDown) {
-        player.setVelocityY(-150);
-        player.anims.play('walk-down', true);
+        player.setVelocityX(100);
+        player.anims.play('walk-right', true);
+        moving = true;
+    } 
+
+    if (cursors.up.isDown) {
+        player.setVelocityY(-100);
+        if (!moving) player.anims.play('walk-up', true);
+        moving = true;
     } else if (cursors.down.isDown) {
-        player.setVelocityY(150);
-        player.anims.play('walk-down', true);
-    } else {
+        player.setVelocityY(100);
+        if (!moving) player.anims.play('walk-down', true);
+        moving = true;
+    }
+
+    if (!moving) {
         player.anims.stop();
     }
 }
 
+// Fonction pour afficher un popup HTML
 function showPopup(text) {
     popup.innerText = text + "\n\n(Cliquez pour fermer)";
     popup.style.display = 'block';
 }
+
+
