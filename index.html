@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Mini CV Jeu - Retro Style</title>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+    <style>
+        body { margin: 0; background: #000; }
+        #game-container { width: 800px; height: 600px; margin: auto; display: block; }
+        .popup {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #222;
+            color: #fff;
+            border: 2px solid #fff;
+            padding: 20px;
+            display: none;
+            font-family: monospace;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container"></div>
+    <div id="popup" class="popup"></div>
+    <script src="game.js"></script>
+</body>
+</html>
