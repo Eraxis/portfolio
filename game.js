@@ -24,13 +24,13 @@ let popup;
 
 function preload() {
     // Tilesets
-    this.load.image('tiles', 'assets/tiles/dungeon.png'); // exemple dungeon tileset
+    this.load.image('tiles', 'assets/tiles/Tileset.png');
 
-    // Personnage (Link)
-    this.load.spritesheet('link', 'assets/sprites/link.png', { frameWidth: 16, frameHeight: 16 });
+    // Personnage
+    this.load.spritesheet('link', 'assets/sprites/Link_anim.png', { frameWidth: 16, frameHeight: 16 });
 
     // Coffre
-    this.load.image('chest', 'assets/sprites/chest.png');
+    //this.load.image('chest', 'assets/sprites/chest.png');
 
     // Sons/Musique
     // this.load.audio('music', 'assets/audio/music.mp3');
@@ -138,5 +138,6 @@ function showPopup(text) {
     popup.innerText = text + "\n\n(Cliquez pour fermer)";
     popup.style.display = 'block';
 }
+
 
 
